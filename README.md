@@ -1,4 +1,4 @@
-# Implementation-of-Decision-Tree-Regressor-Model-for-Predicting-the-Salary-of-the-Employee
+<img width="1225" height="418" alt="image" src="https://github.com/user-attachments/assets/e6d56d5c-280b-4882-bd8d-dd56d2a78172" /># Implementation-of-Decision-Tree-Regressor-Model-for-Predicting-the-Salary-of-the-Employee
 
 ## AIM:
 To write a program to implement the Decision Tree Regressor Model for Predicting the Salary of the Employee.
@@ -21,70 +21,97 @@ To write a program to implement the Decision Tree Regressor Model for Predicting
 /*
 Program to implement the Decision Tree Regressor Model for Predicting the Salary of the Employee.
 Developed by: S LOGESHWAR
-RegisterNumber:  25014493
+RegisterNumber:  212225040204
 */
 
-
-# Import libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor, plot_tree
+from sklearn import metrics
+import warnings
+warnings.filterwarnings("ignore")
 
-# ------------------------------
-# Step 1: Sample dataset
-# ------------------------------
-data = {
-    'Position': ['Business Analyst', 'Junior Consultant', 'Senior Consultant',
-                 'Manager', 'Country Manager', 'Region Manager',
-                 'Partner', 'Senior Partner', 'C-level', 'CEO'],
-    'Level': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    'Salary': [45000, 50000, 60000, 80000, 110000, 150000, 200000, 300000, 500000, 1000000]
-}
+# 1) Load dataset
+csv_path = "Salary.csv"    # <-- Change path if needed
+try:
+    data = pd.read_csv(csv_path)
+except FileNotFoundError:
+    raise FileNotFoundError(f"File not found at: {csv_path}. Update the path.")
 
-df = pd.DataFrame(data)
+print("Dataset Loaded Successfully!\n")
 
-# ------------------------------
-# Step 2: Split features and target
-# ------------------------------
-X = df[['Level']]     # Feature (Level)
-y = df['Salary']      # Target (Salary)
+# 2) Data exploration
+print("Shape:", data.shape)
+display(data.head())
+print("\nInfo:")
+display(data.info())
+print("\nMissing Values:\n", data.isnull().sum())
 
-# ------------------------------
-# Step 3: Create Decision Tree Regressor
-# ------------------------------
-regressor = DecisionTreeRegressor(random_state=42)
-regressor.fit(X, y)
+# 3) Encode categorical column 'Position'
+if "Position" in data.columns:
+    le = LabelEncoder()
+    data["Position"] = le.fit_transform(data["Position"])
+    print("\nLabel Encoding Mapping (Position):")
+    mapping = dict(zip(le.classes_, le.transform(le.classes_)))
+    print(mapping)
 
-# ------------------------------
-# Step 4: Predict salary for the dataset or new levels
-# ------------------------------
-y_pred = regressor.predict(X)
-print("Predicted salaries:", y_pred)
+# 4) Select features and target
+X = data[["Position", "Level"]]
+y = data["Salary"]
 
-# Example: predict salary for a new employee at level 6.5
-level = np.array([[6.5]])
-predicted_salary = regressor.predict(level)
-print(f"Predicted Salary for level {level[0][0]}: {predicted_salary[0]}")
+print("\nFeature Sample:")
+display(X.head())
+print("\nTarget Sample:")
+display(y.head())
 
-# ------------------------------
-# Step 5: Visualize the results (High-resolution curve)
-# ------------------------------
-X_grid = np.arange(min(X.values), max(X.values)+0.01, 0.01)  # High-resolution for smoother curve
-X_grid = X_grid.reshape(-1, 1)
+# 5) Train-test split
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X, y, test_size=0.2, random_state=2
+)
+print(f"\nTrain Size: {X_train.shape}, Test Size: {X_test.shape}")
 
-plt.scatter(X, y, color='red', label='Actual Salary')
-plt.plot(X_grid, regressor.predict(X_grid), color='blue', label='Decision Tree Prediction')
-plt.title('Decision Tree Regression: Level vs Salary')
-plt.xlabel('Level')
-plt.ylabel('Salary')
-plt.legend()
+# 6) Initialize and train Decision Tree Regressor
+dt = DecisionTreeRegressor(random_state=10)
+dt.fit(X_train, Y_train)
+print("\nModel Training Completed!")
+
+# 7) Predict on test data
+y_pred = dt.predict(X_test)
+print("\nPredicted Salaries:", y_pred)
+
+# 8) Evaluate model using R² Score
+r2 = metrics.r2_score(Y_test, y_pred)
+print(f"\nR² Score: {r2:.4f}")
+
+# 9) Visualize Decision Tree
+plt.figure(figsize=(12,8))
+plot_tree(dt, feature_names=["Position", "Level"], filled=True)
+plt.title("Decision Tree Regressor for Salary Prediction")
 plt.show()
+
+# 10) Feature Importances
+importances = pd.Series(dt.feature_importances_, index=["Position", "Level"])
+print("\nFeature Importances:")
+display(importances)
+
+
 
 ```
 
 ## Output:
-<img width="1787" height="580" alt="image" src="https://github.com/user-attachments/assets/e5649821-e133-4dfd-aa73-b10f2bb60543" />
+<img width="1225" height="418" alt="image" src="https://github.com/user-attachments/assets/526e2385-b3c5-4f40-a268-8672d4749956" />
+<img width="1218" height="415" alt="image" src="https://github.com/user-attachments/assets/e62de378-c08c-4fb9-b114-918f8b133eb3" />
+<img width="1217" height="395" alt="image" src="https://github.com/user-attachments/assets/4835e23b-4019-489c-a34b-6a7f5ef41444" />
+<img width="1223" height="228" alt="image" src="https://github.com/user-attachments/assets/75056396-6c4e-482a-aa7d-fd4d302c643f" />
+<img width="1353" height="403" alt="image" src="https://github.com/user-attachments/assets/c23481fe-2d54-4c3c-8b3d-00da5bc10aad" />
+<img width="1348" height="382" alt="image" src="https://github.com/user-attachments/assets/09087684-95c6-455d-b8d7-9194b9b04a64" />
+<img width="1360" height="140" alt="image" src="https://github.com/user-attachments/assets/99dc19c8-bc80-4688-b451-f90edadda198" />
+<img width="1360" height="140" alt="image" src="https://github.com/user-attachments/assets/6a17d117-cadc-4559-aaf3-2f71326f0720" />
+
+
 
 
 
