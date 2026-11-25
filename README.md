@@ -109,7 +109,7 @@ display(importances)
 <img width="1353" height="403" alt="image" src="https://github.com/user-attachments/assets/c23481fe-2d54-4c3c-8b3d-00da5bc10aad" />
 <img width="1348" height="382" alt="image" src="https://github.com/user-attachments/assets/09087684-95c6-455d-b8d7-9194b9b04a64" />
 <img width="1360" height="140" alt="image" src="https://github.com/user-attachments/assets/99dc19c8-bc80-4688-b451-f90edadda198" />
-<img width="1360" height="140" alt="image" src="https://github.com/user-attachments/assets/6a17d117-cadc-4559-aaf3-2f71326f0720" />
+
 
 
 
